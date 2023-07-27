@@ -4,7 +4,13 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/Counter.sol";
 
-contract CounterTest is Test {
+import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
+
+import "../src/MinimalProxyUtil.sol";
+
+contract ClonesTest is Test {
+    using MinimalProxyUtil for address;
+
     Counter public counter;
 
     function setUp() public {
@@ -12,13 +18,11 @@ contract CounterTest is Test {
         counter.setNumber(0);
     }
 
-    function testIncrement() public {
-        counter.increment();
-        assertEq(counter.number(), 1);
-    }
+    function testClone() public {
+        address clone = Clones.clone(address(counter));
+        console2.log("counter address", address(counter));
+        console2.log("clone address", clone);
 
-    function testSetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
+        assertEq(clone.getImplFromProxy(), address(counter));
     }
 }
