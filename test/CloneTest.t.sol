@@ -2,11 +2,18 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/Counter.sol";
 
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 
 import "../src/MinimalProxyUtil.sol";
+
+contract Counter {
+    uint256 public number;
+
+    function setNumber(uint256 _number) public {
+        number = _number;
+    }
+}
 
 contract ClonesTest is Test {
     using MinimalProxyUtil for address;
